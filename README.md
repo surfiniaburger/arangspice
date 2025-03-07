@@ -95,6 +95,7 @@ If you want to allow all instances in the project to have external IPs, use the 
     "allValues": "ALLOW"
   }
 }
+
 Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
 
 and then apply it with the same gcloud resource-manager org-policies set-policy command as above. After applying the policy, you may need to recreate your instance for the changes to take effect.
