@@ -65,37 +65,5 @@ First, create a JSON file named policy.json with the following content, replacin
 }
 Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
 
-For your specific case, the policy.json file would look like this:
 
-{
-  "constraint": "constraints/compute.vmExternalIpAccess",
-  "listPolicy": {
-    "allowedValues": [
-      "projects/gem-rush-007/zones/us-central1-a/instances/instance-20250307-225223"
-    ]
-  }
-}
-Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
 
-Then, apply this policy using the following gcloud command, making sure to replace PROJECT_ID with your actual project ID ( gem-rush-007 in your case) or ORGANIZATION_ID if you're setting the policy at the organization level:
-
-gcloud resource-manager org-policies set-policy policy.json --project=PROJECT_ID
-Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
-
-For your specific case:
-
-gcloud resource-manager org-policies set-policy policy.json --project=gem-rush-007
-Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
-
-If you want to allow all instances in the project to have external IPs, use the following policy.json content:
-
-{
-  "constraint": "constraints/compute.vmExternalIpAccess",
-  "listPolicy": {
-    "allValues": "ALLOW"
-  }
-}
-
-Generated code may be subject to license restrictions not shown here. Use code with care. Learn more 
-
-and then apply it with the same gcloud resource-manager org-policies set-policy command as above. After applying the policy, you may need to recreate your instance for the changes to take effect.
