@@ -115,7 +115,7 @@
 
 # Finally, a simple Gradio interface is launched, allowing users to interact with the `query_graph_with_smart_router` function through a web UI.
 
-
+```
 
 Care coordination analysis leverages the structure of patient networks to identify key individuals and clusters, providing actionable insights for healthcare systems. Here’s how it benefits society:
 
