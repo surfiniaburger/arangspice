@@ -23,7 +23,7 @@
 #         # ... (Uses LLM to generate AQL, then ArangoGraphQAChain to execute) ...
 #     ```
 
-# *   **`text_to_nx_algorithm_to_text(query: str) -> str`**: Converts natural language to NetworkX code for graph analysis, executes it, and returns a natural language response. (This part is incomplete in your notebook).
+# *   **`text_to_nx_algorithm_to_text(query: str) -> str`**: Converts natural language to NetworkX code for graph analysis, executes it, and returns a natural language response.
 #     ```python
 #     @tool
 #     def text_to_nx_algorithm_to_text(query: str) -> str:
