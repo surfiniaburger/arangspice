@@ -239,7 +239,7 @@ Left: Early computer terminals, static charts. Right: Business Intelligence (BI)
 
 (Visual: Screenshots and demos of your project. Focus on the user interface, the queries being asked, and the results being displayed. Highlight the graph visualizations.)
 
-(Narrator): "So, what did we build? We created [Your Project Name], an agentic application that analyzes patient data using GraphRAG and the power of ArangoDB and NVIDIA cuGraph."
+(Narrator): "So, what did we build? We created Arangspice, an agentic application that analyzes patient data using GraphRAG and the power of ArangoDB and NVIDIA cuGraph."
 
 (Narrator): "We used the Synthea dataset, which represents a network of patients, conditions, and observations. Our agent can answer complex questions like, 'Find the top 5 most influential patients with diabetes in North Carolina.'"
 
@@ -294,5 +294,49 @@ This improved script provides a strong foundation for your hackathon video. Reme
 
 
 
+GraphRAG (Retrieval-Augmented Generation): The function implements a GraphRAG approach. It combines structured data retrieval from a graph database (ArangoDB) with the generative capabilities of a Large Language Model (LLM). This allows for a richer, more contextualized analysis than either technique could provide alone. The function retrieves data, performs graph calculations, and then augments the LLM's generation with this retrieved information.
 
+Dynamic Subgraph Creation and Analysis: Instead of analyzing the entire patient graph (which could be very large), the function intelligently extracts a relevant subgraph based on the user's query. This subgraph focuses on patients in a specific location and, optionally, with a specific condition. This targeted approach improves efficiency and the relevance of the analysis.
+
+Multi-faceted Centrality Analysis: The code calculates multiple centrality measures (degree, betweenness, and eigenvector centrality), and then combines them into a weighted composite score. This provides a more nuanced view of patient influence within the network than any single measure would. The weighting (0.5 for degree, 0.3 for betweenness, and 0.2 for eigenvector) prioritizes degree centrality, reflecting its importance in this context. The function also handles potential errors during centrality calculations, providing fallback mechanisms.
+
+
+
+AQL Query:
+
+The build_patient_query_with_expanded_location function constructs an AQL (ArangoDB Query Language) query based on the user's input (condition and location). This query efficiently retrieves relevant patient data from the database.
+
+The query uses FILTER clauses to select patients matching the specified location (using the expanded location terms).
+
+If a condition is specified, it filters for patients associated with that condition via the patients_to_conditions edge collection.
+
+It also retrieves observations for each patient from the patients_to_observations edge collection, limiting observations to the past year.
+
+The query uses traversals (1..1 OUTBOUND for conditions, 1..3 OUTBOUND for observations) to efficiently navigate the graph relationships.
+
+Graph Construction (NetworkX/CuGraph):
+
+The build_patient_graph function takes the results of the AQL query (a list of patient data) and constructs a NetworkX graph.
+
+Each patient becomes a node with type='patient'.
+
+Each unique condition becomes a node with type='condition'.
+
+Each unique observation (combination of observation code and value) becomes a node with type='observation'.
+
+Edges are created to represent relationships: has_condition edges between patients and conditions, and has_observation edges between patients and observations.
+
+Centrality Calculations:
+
+The calculate_multiple_centrality_measures function calculates three centrality measures:
+
+Degree Centrality: The number of connections a node has. A patient connected to many conditions and observations will have a high degree centrality. The function tries nx.degree_centrality(G) first. If that fails (which can happen in some graph configurations), it falls back to a manual calculation: len(list(G.neighbors(node))) / max(1, len(G) - 1). This fallback calculates the degree and normalizes it by the maximum possible degree.
+
+Betweenness Centrality: Measures how often a node lies on the shortest path between other nodes. A patient who connects disparate parts of the network (e.g., patients with different conditions) will have high betweenness. It attempts to use nx.betweenness_centrality(G, k=min(10, G.number_of_nodes())). The k parameter limits the number of nodes considered for performance reasons. If this fails, or if the graph has fewer than 3 nodes, it sets betweenness to 0.0 for all nodes.
+
+Eigenvector Centrality: Measures a node's influence based on the influence of its neighbors. A patient connected to other highly influential patients will have high eigenvector centrality. It tries nx.eigenvector_centrality_numpy(G) (the NumPy version is often more stable). If this fails, or if the graph is not connected or has only one node, it sets eigenvector centrality to 0.0 for all nodes.
+
+Normalization: Each centrality measure is normalized to a 0-1 range. This is crucial for combining them into a composite score. The normalization formula is: (value - min_val) / (max_val - min_val). It skips normalization if all values for a measure are 0.
+
+Composite Centrality: The three normalized centrality measures are combined into a single composite score using a weighted average: weighted_sum = (0.5 * degree) + (0.3 * betweenness) + (0.2 * eigenvector).
 
