@@ -296,6 +296,8 @@ This improved script provides a strong foundation for your hackathon video. Reme
 
 GraphRAG (Retrieval-Augmented Generation): The function implements a GraphRAG approach. It combines structured data retrieval from a graph database (ArangoDB) with the generative capabilities of a Large Language Model (LLM). This allows for a richer, more contextualized analysis than either technique could provide alone. The function retrieves data, performs graph calculations, and then augments the LLM's generation with this retrieved information.
 
+
+
 Dynamic Subgraph Creation and Analysis: Instead of analyzing the entire patient graph (which could be very large), the function intelligently extracts a relevant subgraph based on the user's query. This subgraph focuses on patients in a specific location and, optionally, with a specific condition. This targeted approach improves efficiency and the relevance of the analysis.
 
 Multi-faceted Centrality Analysis: The code calculates multiple centrality measures (degree, betweenness, and eigenvector centrality), and then combines them into a weighted composite score. This provides a more nuanced view of patient influence within the network than any single measure would. The weighting (0.5 for degree, 0.3 for betweenness, and 0.2 for eigenvector) prioritizes degree centrality, reflecting its importance in this context. The function also handles potential errors during centrality calculations, providing fallback mechanisms.
