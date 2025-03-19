@@ -204,3 +204,8 @@ These tools, and the underlying `query_graph_with_smart_router`, demonstrate a c
 * **UI Improvements:** Continuously improve the user interface.
 
 We believe ArangSpice has the potential to be a powerful tool for healthcare research and analysis, and we're excited to continue developing it! Stay tuned for more spicy updates! 🌶️🔥
+
+
+
+
+[relevant packages](https://ai.google.dev/gemini-api/docs/downloads)
